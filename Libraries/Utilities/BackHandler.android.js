@@ -22,12 +22,13 @@ type BackPressEventName = $Enum<{
 
 var _backPressSubscriptions = new Set();
 
-RCTDeviceEventEmitter.addListener(DEVICE_BACK_EVENT, function() {
-  var backPressSubscriptions = new Set(_backPressSubscriptions);
+RCTDeviceEventEmitter.addListener(DEVICE_BACK_EVENT, function () {
+  var subscriptions = [];
   var invokeDefault = true;
-  var subscriptions = [...backPressSubscriptions].reverse();
+
+  _backPressSubscriptions.forEach(item => subscriptions.push(item));
   for (var i = 0; i < subscriptions.length; ++i) {
-    if (subscriptions[i]()) {
+    if (subscriptions[subscriptions.length - 1 - i]()) {
       invokeDefault = false;
       break;
     }
